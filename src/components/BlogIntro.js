@@ -17,29 +17,37 @@ class BlogIntro extends Component {
 
         e.preventDefault()
 
-        const formData = new FormData(e.target),
-        formDataObj = Object.fromEntries(formData.entries())
+/*
+var promptForAPI = Write an uplifting and positive Blog intro paragraph for the blog title ${formDataObj.blogTitle} and include the keywords: ${formDataObj.context}`
+ReusableFunction(promptForAPI);
+*/
 
-        // OpenAI davinci completion
-        const configuration = new Configuration({
-            apiKey: process.env.REACT_APP_API_KEY,
-        });
-        const openai = new OpenAIApi(configuration);
 
-        openai.createCompletion("text-davinci-002", {
-            prompt: `Write an uplifting and positive Blog intro paragraph for the blog title ${formDataObj.blogTitle} and include the keywords: ${formDataObj.context}`,
-            temperature: 0.85,
-            max_tokens: 200,
-            top_p: 1,
-            frequency_penalty: 0,
-            presence_penalty: 0,
-        })
-        .then((response) => {
-            this.setState({
-                heading: `Blog intro for: ${formDataObj.blogTitle} with the keywords ${formDataObj.context}`,
-                response: `${response.data.choices[0].text}`
-            })
-        }); 
+/* this is moved to global function */
+const formData = new FormData(e.target),
+formDataObj = Object.fromEntries(formData.entries())
+
+// OpenAI davinci completion
+const configuration = new Configuration({
+    apiKey: process.env.REACT_APP_API_KEY,
+});
+const openai = new OpenAIApi(configuration);
+
+openai.createCompletion("text-davinci-002", {
+    prompt: `Write an uplifting and positive Blog intro paragraph for the blog title ${formDataObj.blogTitle} and include the keywords: ${formDataObj.context}`,
+    temperature: 0.85,
+    max_tokens: 200,
+    top_p: 1,
+    frequency_penalty: 0,
+    presence_penalty: 0,
+})
+.then((response) => {
+    this.setState({
+        heading: `Blog intro for: ${formDataObj.blogTitle} with the keywords ${formDataObj.context}`,
+        response: `${response.data.choices[0].text}`
+    })
+}); 
+/* end of moved to */
     }
 
     render () {
